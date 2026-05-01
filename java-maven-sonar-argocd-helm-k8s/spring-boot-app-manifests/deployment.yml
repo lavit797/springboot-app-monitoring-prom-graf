@@ -22,7 +22,7 @@ spec:
       containers:
       - name: spring-boot-app-prom-graf
         image: tyagilavit/spring-boot-prom-graf:v1
-        imagePullPolicy: always   # use local Minikube image
+        imagePullPolicy: Always   # use local Minikube image
         ports:
         - containerPort: 8080
         resources:

@@ -4,7 +4,7 @@ metadata:
   name: springboot-app
   labels:
     app: springboot-app
-    
+---
 apiVersion: v1
 kind: Namespace
 metadata:
