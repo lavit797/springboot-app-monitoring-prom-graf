@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spring-boot-app
+  name: spring-boot-app-prom-graf-deployment
   labels:
-    app: spring-boot-app
+    app: spring-boot-app-prom-graf
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: spring-boot-app
+      app: spring-boot-app-prom-graf
   template:
     metadata:
       labels:
-        app: spring-boot-app
+        app: spring-boot-app-prom-graf
     spec:
       containers:
-      - name: spring-boot-app
-        image: tyagilavit/spring-boot-app:13
+      - name: spring-boot-prom-graf
+        image: tyagilavit/spring-boot-prom-graf:v1
         ports:
         - containerPort: 8080
