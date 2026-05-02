@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spring-boot-app-prom-graf-ingress
+  namespace: spring-boot-app
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+  - http:                                # ✅ host nahi hai — IP se seedha access
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: springboot-app-svc
+            port:
+              number: 80
