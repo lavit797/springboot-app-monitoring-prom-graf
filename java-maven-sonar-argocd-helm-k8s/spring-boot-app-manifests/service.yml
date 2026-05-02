@@ -1,13 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: spring-boot-app-service
+  name: springboot-app-svc
+  namespace: springboot-app
+  labels:
+    app: spring-boot-app-prom-graf
 spec:
-  type: NodePort
+  type: ClusterIP
+  selector:
+    app: spring-boot-app-prom-graf
   ports:
-  - name: http
+  - name: http                  # named port — required by ServiceMonitor
     port: 80
     targetPort: 8080
     protocol: TCP
-  selector:
-    app: spring-boot-app
