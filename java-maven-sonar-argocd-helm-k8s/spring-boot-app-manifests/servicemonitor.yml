@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: spring-boot-app-prom-graf-monitor
+  namespace: monitoring                        # monitoring namespace mein hoga
+  labels:
+    release: kube-prometheus                   # ⚠️ ye bahut important hai — Helm release naam se match karna chahiye
+spec:
+  namespaceSelector:
+    matchNames:
+    - spring-boot-app                          # jis namespace mein app hai
+  selector:
+    matchLabels:
+      app: spring-boot-app-prom-graf           # service.yaml ke labels se match karna chahiye
+  endpoints:
+  - port: http                                 # service.yaml mein port ka naam "http" hona chahiye
+    path: /actuator/prometheus
+    interval: 15s
+    scrapeTimeout: 10s

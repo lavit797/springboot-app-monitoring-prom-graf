@@ -1,0 +1,97 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: spring-boot-app-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus
+spec:
+  groups:
+
+  # ── Group 1: HTTP Alerts ──────────────────────
+  - name: springboot.http
+    rules:
+
+    - alert: HighHttpErrorRate
+      expr: |
+        (
+          sum(rate(http_server_requests_seconds_count{status=~"5.."}[5m]))
+          /
+          sum(rate(http_server_requests_seconds_count[5m]))
+        ) * 100 > 5
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High HTTP 5xx error rate"
+        description: "5xx errors above 5% for 2 minutes"
+
+    - alert: HighResponseTime
+      expr: |
+        (
+          sum(rate(http_server_requests_seconds_sum[5m]))
+          /
+          sum(rate(http_server_requests_seconds_count[5m]))
+        ) > 2
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High average response time"
+        description: "Avg response time above 2 seconds for 5 minutes"
+
+  # ── Group 2: JVM Alerts ───────────────────────
+  - name: springboot.jvm
+    rules:
+
+    - alert: HighJvmHeapUsage
+      expr: |
+        (
+          jvm_memory_used_bytes{area="heap"}
+          /
+          jvm_memory_max_bytes{area="heap"}
+        ) * 100 > 85
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "JVM Heap usage high"
+        description: "Heap usage above 85% for 5 minutes"
+
+    - alert: JvmHeapCritical
+      expr: |
+        (
+          jvm_memory_used_bytes{area="heap"}
+          /
+          jvm_memory_max_bytes{area="heap"}
+        ) * 100 > 95
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "JVM Heap critical - OOM risk"
+        description: "Heap above 95% - OutOfMemoryError aa sakta hai"
+
+  # ── Group 3: Availability Alerts ─────────────
+  - name: springboot.availability
+    rules:
+
+    - alert: AppDown
+      expr: up{job=~".*spring-boot.*"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Spring Boot app is DOWN"
+        description: "Pod 1 minute se zyada se down hai"
+
+    - alert: PodRestartingFrequently
+      expr: |
+        increase(kube_pod_container_status_restarts_total
+        {namespace="spring-boot-app"}[15m]) > 3
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Pod baar baar restart ho raha hai"
+        description: "Last 15 minutes mein 3 se zyada restarts"
