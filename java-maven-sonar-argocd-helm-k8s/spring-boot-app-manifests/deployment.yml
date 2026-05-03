@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: spring-boot-app-prom-graf-deployment
-  namespace: spring-boot-app
+  namespace: springboot-app
   labels:
     app: spring-boot-app-prom-graf
 spec:
@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: spring-boot-app-prom-graf
-        image: tyagilavit/spring-boot-prom-graf:v1
+        image: tyagilavit/springboot-prom-graf:v1
         imagePullPolicy: Always                  
         ports:
         - containerPort: 8080
