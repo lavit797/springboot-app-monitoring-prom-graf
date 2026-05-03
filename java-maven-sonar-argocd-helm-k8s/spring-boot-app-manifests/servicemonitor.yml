@@ -8,7 +8,7 @@ metadata:
 spec:
   namespaceSelector:
     matchNames:
-    - spring-boot-app                          # jis namespace mein app hai
+    - springboot-app                          # jis namespace mein app hai
   selector:
     matchLabels:
       app: spring-boot-app-prom-graf           # service.yaml ke labels se match karna chahiye

@@ -8,7 +8,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
   rules:
-  - http:                                # ✅ host nahi hai — IP se seedha access
+  - http:                                
       paths:
       - path: /
         pathType: Prefix
